@@ -1,0 +1,198 @@
+{
+ "source": "POST http://<service>/api/keywords/debug/benchmark_sentences",
+ "captured": "2026-07-30",
+ "document": "ACL RD-TEC 2.0 raw_abstract_txt/01/H01-1001_abstr.xml",
+ "note": "Live service response. The offline block must reproduce every counter, the concept names in order, and every score exactly.",
+ "request": {
+  "sentences": [
+   "Oral communication is ubiquitous and carries important information yet it is also time consuming to document.",
+   "Given the development of storage media and networks one could just record and store a conversation for documentation.",
+   "The question is, however, how an interesting information piece would be found in a large database.",
+   "Traditional information retrieval techniques use a histogram of keywords as the document representation but oral communication may offer additional indices such as the time and place of the rejoinder and the attendance.",
+   "An alternative index could be the activity such as discussing, planning, informing, story-telling, etc.",
+   "This paper addresses the problem of the automatic detection of those activities in meeting situation and everyday rejoinders.",
+   "Several extensions of this basic idea are being discussed and/or evaluated: Similar to activities one can define subsets of larger database and detect those automatically which is shown on a large database of TV shows.",
+   "Emotions and other indices such as the dominance distribution of speakers might be available on the surface and could be used directly.",
+   "Despite the small size of the databases used some results about the effectiveness of these indices can be obtained."
+  ],
+  "top_n": -1
+ },
+ "response": {
+  "total_sentences": 9,
+  "execution_time_seconds": 1.0257,
+  "stage_1_unique_nps": 17,
+  "stage_2_glossary_matches": 2,
+  "stage_3_unmatched_nps_evaluated": 15,
+  "stage_3_onnx_classified_positive": 13,
+  "total_concepts_returned": 15,
+  "concepts": [
+   {
+    "id": "87741322b5b41e65ce7ef49332c2657c9c5184a6",
+    "name": "document representation",
+    "level": 3,
+    "definition": "Document Representation is a formal model in information retrieval that characterizes a document as a structured instance within a defined feature space, distinguished by its representation of textual content through symbolic, statistical, or semantic features for the purpose of indexing, retrieval, and analysis.",
+    "semantic_score": 0.5381,
+    "faiss_score": 0.8147,
+    "source": "glossary",
+    "definition_source": "glossary",
+    "relevance_score": 2.5381,
+    "paper_context": "Traditional information retrieval techniques use a histogram of keywords as the document representation but oral communication may offer additional indices such as the time and place of the rejoinder and the attendance."
+   },
+   {
+    "id": "0479f1f52cae2c543970b0ce4bd9f919baa4c87b",
+    "name": "oral communication",
+    "level": 3,
+    "definition": "Oral Communication is a foundational component of Adult Basic Education that encompasses the systematic development of listening and speaking competencies necessary for effective interpersonal exchange, academic engagement, and functional literacy in diverse social and vocational contexts.",
+    "semantic_score": 0.4172,
+    "faiss_score": 0.7478,
+    "source": "glossary",
+    "definition_source": "glossary",
+    "relevance_score": 2.4172,
+    "paper_context": "Traditional information retrieval techniques use a histogram of keywords as the document representation but oral communication may offer additional indices such as the time and place of the rejoinder and the attendance."
+   },
+   {
+    "id": "ov_storage_media",
+    "name": "storage media",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "Given the development of storage media and networks one could just record and store a conversation for documentation."
+   },
+   {
+    "id": "ov_large_database",
+    "name": "large database",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "The question is, however, how an interesting information piece would be found in a large database. \n...\n Several extensions of this basic idea are being discussed and/or evaluated: Similar to activities one can define subsets of larger database and detect those automatically which is shown on a large database of TV shows."
+   },
+   {
+    "id": "ov_interesting_information_piece",
+    "name": "interesting information piece",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "The question is, however, how an interesting information piece would be found in a large database."
+   },
+   {
+    "id": "ov_additional_indices",
+    "name": "additional indices",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "Traditional information retrieval techniques use a histogram of keywords as the document representation but oral communication may offer additional indices such as the time and place of the rejoinder and the attendance."
+   },
+   {
+    "id": "ov_alternative_index",
+    "name": "alternative index",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "An alternative index could be the activity such as discussing, planning, informing, story-telling, etc."
+   },
+   {
+    "id": "ov_automatic_detection",
+    "name": "automatic detection",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "This paper addresses the problem of the automatic detection of those activities in meeting situation and everyday rejoinders."
+   },
+   {
+    "id": "ov_everyday_rejoinders",
+    "name": "everyday rejoinders",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "This paper addresses the problem of the automatic detection of those activities in meeting situation and everyday rejoinders."
+   },
+   {
+    "id": "ov_larger_database",
+    "name": "larger database",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "Several extensions of this basic idea are being discussed and/or evaluated: Similar to activities one can define subsets of larger database and detect those automatically which is shown on a large database of TV shows."
+   },
+   {
+    "id": "ov_other_indices",
+    "name": "other indices",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "Emotions and other indices such as the dominance distribution of speakers might be available on the surface and could be used directly."
+   },
+   {
+    "id": "ov_dominance_distribution",
+    "name": "dominance distribution",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9999,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9999,
+    "paper_context": "Emotions and other indices such as the dominance distribution of speakers might be available on the surface and could be used directly."
+   },
+   {
+    "id": "ov_basic_idea",
+    "name": "basic idea",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9997,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9997,
+    "paper_context": "Several extensions of this basic idea are being discussed and/or evaluated: Similar to activities one can define subsets of larger database and detect those automatically which is shown on a large database of TV shows."
+   },
+   {
+    "id": "ov_important_information",
+    "name": "important information",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9987,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9987,
+    "paper_context": "Oral communication is ubiquitous and carries important information yet it is also time consuming to document."
+   },
+   {
+    "id": "ov_networks_one",
+    "name": "networks one",
+    "level": -1,
+    "definition": "",
+    "semantic_score": 0.9589,
+    "source": "scientific_concept_classifier",
+    "definition_source": null,
+    "relevance_score": 0.9589,
+    "paper_context": "Given the development of storage media and networks one could just record and store a conversation for documentation."
+   }
+  ]
+ }
+}

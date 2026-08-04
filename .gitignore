@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv
+.pytest_cache/
+
+# Local run output
+*.out.json
+*.out.csv

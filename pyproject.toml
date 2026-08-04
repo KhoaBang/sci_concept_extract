@@ -1,0 +1,39 @@
+[project]
+name = "concept-extraction"
+version = "0.1.0"
+description = "Standalone, offline port of the deployed scientific concept extraction block (steps 1-4)."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "nltk==3.10.0",
+    "numpy>=1.26",
+    "rapidfuzz>=3.9",
+    "scikit-learn>=1.5",
+]
+
+[project.optional-dependencies]
+# The full block needs the ML runtime: the embedder, the FAISS glossary index and the ONNX
+# classifier. Kept optional so candidate-generation-only smoke tests stay installable without
+# torch. The heavy imports are lazy, so importing the package never requires this extra.
+inference = [
+    "faiss-cpu>=1.9",
+    "optimum[onnxruntime]>=1.24",
+    "sentence-transformers>=3.0",
+    "transformers>=4.44",
+    "torch>=2.2",
+]
+
+[project.scripts]
+concept-extract = "concept_extraction.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/concept_extraction"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]

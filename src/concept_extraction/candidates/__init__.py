@@ -1,0 +1,1 @@
+"""Candidate generation (step 1) — the ablation ladder and the vendored chunker."""
