@@ -101,6 +101,45 @@ def test_self_check_reports_vendored_hash(isolated_env, capsys):
     assert "vendored chunker hash:  OK" in captured.out
 
 
+def test_fetch_subcommand_single_pdf(isolated_env, tmp_path):
+    fitz = pytest.importorskip("fitz")
+    pdf_dir = tmp_path / "pdfs"
+    pdf_dir.mkdir()
+    doc = fitz.open()
+    page = doc.new_page()
+    page.insert_text((72, 72), "This sentence has more than eight words in it easily.")
+    pdf_path = pdf_dir / "paperA.pdf"
+    doc.save(str(pdf_path))
+    doc.close()
+
+    out_dir = tmp_path / "sentences"
+    rc = _run(["fetch", str(pdf_path), "-o", str(out_dir)])
+
+    assert rc == 0
+    data = json.loads((out_dir / "paperA.json").read_text())
+    assert data["paper_id"] == "paperA"
+    assert data["sentences"] == ["This sentence has more than eight words in it easily."]
+
+
+def test_fetch_subcommand_pdf_dir(isolated_env, tmp_path):
+    fitz = pytest.importorskip("fitz")
+    pdf_dir = tmp_path / "pdfs"
+    pdf_dir.mkdir()
+    for name in ("paperA", "paperB"):
+        doc = fitz.open()
+        page = doc.new_page()
+        page.insert_text((72, 72), "This sentence has more than eight words in it easily.")
+        doc.save(str(pdf_dir / f"{name}.pdf"))
+        doc.close()
+
+    out_dir = tmp_path / "sentences"
+    rc = _run(["fetch", str(pdf_dir), "-o", str(out_dir)])
+
+    assert rc == 0
+    assert (out_dir / "paperA.json").exists()
+    assert (out_dir / "paperB.json").exists()
+
+
 # --- conftest-style fixture: clear artifact env for every test ---------------------
 
 

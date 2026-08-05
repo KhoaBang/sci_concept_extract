@@ -52,6 +52,25 @@ uv run concept-extract run input.json -o out.json        # or -o out.csv
 
 `input.json` is `{"sentences": ["...", "..."]}` (or a plain text file, one sentence per line).
 
+### From a PDF (opt-in, requires the `fetch` extra)
+
+If you have PDFs locally, convert them to the per-paper sentence JSON the block expects.
+This is fully offline — it only reads the PDFs you point it at, it never downloads anything:
+
+```bash
+uv sync --extra fetch               # pymupdf + pymupdf4llm
+
+# a single PDF:
+uv run concept-extract fetch paper.pdf -o out_dir
+
+# or a whole directory of PDFs (the PDF pool):
+uv run concept-extract fetch papers_dir -o out_dir
+```
+
+Each PDF becomes `out_dir/{paper_id}.json` = `{"paper_id": ..., "sentences": [...]}`, where
+`paper_id` is the PDF's filename stem. Re-runs skip already-sentenized papers. The sentence
+splitter is the same byte-faithful `split_sentences` used by the block (8-word minimum).
+
 ## Configuration reference
 
 | Artifact | Env var | CLI flag |
@@ -89,13 +108,14 @@ lazily inside the step functions.
 ## Running the tests
 
 ```bash
-uv sync --extra inference
+uv sync --extra inference --extra fetch
 uv run pytest tests/ -q
 ```
 
 The parity test (`test_block_parity.py`) compares the offline block against a captured live
 response and is skipped if the fixture is missing. It needs the embedder, glossary and
-classifier to be reachable (set the env vars above).
+classifier to be reachable (set the env vars above). The PDF tests (`test_fulltext.py`) are
+skipped if the `fetch` extra isn't installed.
 
 ## Notes
 

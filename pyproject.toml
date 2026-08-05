@@ -23,6 +23,13 @@ inference = [
     "torch>=2.2",
 ]
 
+# PDF -> text -> sentences (`concept_extraction.fetch`). The package reads PDFs the user
+# provides locally; it never fetches anything. Needed by the `fetch` CLI subcommand.
+fetch = [
+    "pymupdf>=1.24",
+    "pymupdf4llm>=0.0.17",
+]
+
 [project.scripts]
 concept-extract = "concept_extraction.cli:main"
 

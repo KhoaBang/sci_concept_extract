@@ -19,6 +19,13 @@ Service checkout:
 | `classifier.py::classify_batch` | `concept_classifier.py::classify_scientific_concepts_batch` | thresholding split out |
 | `embed.py::encode_texts` | `text_utils.py::encode_texts` → `lol.text.text_model.TextModel` | encode, then sklearn L2-normalise |
 | step 1 | `candidates/pipeline.py` + `data/vendored/nounphrase_extractor.py` | reused, already hash-verified |
+| `fetch/fulltext.py::read_pdf_text` | `pdf_reader.read_pdf` | markdown via `pymupdf4llm`, per-page `fitz` fallback |
+| `fetch/fulltext.py::sentenize` | `candidates/pipeline.py::split_sentences` | reused, already byte-faithful |
+
+`fetch/fulltext.py` turns a local PDF (or a directory of PDFs) into per-paper sentence JSON.
+It is fully offline — it reads PDFs the user provides and never fetches anything. Unlike the
+eval-harness original, its `main()` reads the PDF source and output dir from CLI args (the
+standalone package has no harness `data/scratch` paths).
 
 Config values are transcribed from `paper-processing-services/config.yml`, **not** from the
 dataclass defaults in `common/settings.py` — the two disagree on `glossary_def_threshold`

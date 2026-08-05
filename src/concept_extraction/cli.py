@@ -4,6 +4,7 @@ Subcommands:
 
     concept-extract run    <input> -o <out>   run the block over sentences
     concept-extract self-check               validate artifact paths + vendored hash
+    concept-extract fetch <pdf> -o <out>     PDF(s) -> per-paper sentence JSON (no network)
 
 Input is a JSON file with `{"sentences": [...]}` or a plain text file (one sentence per
 line; blank lines are retained as-is). Output is JSON with the same shape as the parsed
@@ -121,6 +122,17 @@ def _cmd_run(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_fetch(args: argparse.Namespace) -> int:
+    """Sentences from a local PDF (or a directory of PDFs). No network."""
+    from .fetch.fulltext import process_all, process_pdf
+
+    if args.pdf.is_dir():
+        process_all(args.pdf, args.out_dir)
+    else:
+        process_pdf(args.pdf, args.out_dir)
+    return 0
+
+
 def _cmd_self_check(args: argparse.Namespace) -> int:
     cfg = _build_config(args)
     problems = validate_artifacts(cfg)
@@ -197,6 +209,18 @@ def build_parser() -> argparse.ArgumentParser:
     check_p = sub.add_parser("self-check", help="validate artifacts and vendored hash")
     _add_artifact_flags(check_p)
     check_p.set_defaults(func=_cmd_self_check)
+
+    fetch_p = sub.add_parser(
+        "fetch",
+        help="convert a local PDF (or directory of PDFs) to per-paper sentence JSON",
+    )
+    fetch_p.add_argument(
+        "pdf",
+        type=Path,
+        help="a single .pdf file, or a directory of .pdf files (the PDF pool)",
+    )
+    fetch_p.add_argument("-o", "--out", dest="out_dir", type=Path, required=True, help="output dir")
+    fetch_p.set_defaults(func=_cmd_fetch)
 
     return parser
 
