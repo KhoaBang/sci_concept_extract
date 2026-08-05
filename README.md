@@ -89,6 +89,58 @@ path passed to `CONCEPT_EXTRACTION_CLASSIFIER_MODEL` / `--classifier-model`.
 Other knobs (all on the CLI): `--top-n` (default -1 = uncapped), `--threshold` (default 0.60),
 `--rung` (default `A0` = production).
 
+## How configuration is layered
+
+There is **no `.yml` file** — configuration is a typed, frozen dataclass (`BlockConfig` in
+`src/concept_extraction/config.py`) plus environment variables. From lowest to highest
+precedence:
+
+1. **`config.py` defaults** — the `BlockConfig` field defaults and the `PRODUCTION` singleton.
+   These are the *instrument* and are the deployed values, transcribed from the service's
+   `config.yml`. Editing them changes the instrument for **every** run.
+2. **Environment variables** — override the three artifact paths (see table above). Read at
+   instantiation time via `default_factory`.
+3. **CLI flags** — override env for a single run (see below).
+4. **`dataclasses.replace(...)`** — the Python API for one-off scenarios without touching
+   committed defaults.
+
+The rule (from `config.py`): *"Changing any value here changes the instrument. Do not edit in
+place to run a scenario — construct a modified copy with `replace` so the run manifest records
+both."* The `config_fingerprint` on every result hashes every active parameter, so a changed
+config is detectable in the output.
+
+## Common cases: what to change and where
+
+| What you want | File / flag | How |
+|---|---|---|
+| **Swap the classifier model** (e.g. v1 → finetuned v2) | env or CLI | Point `CONCEPT_EXTRACTION_CLASSIFIER_MODEL` (or `--classifier-model`) at the other ONNX model dir. The model choice is **not** hard-coded — a different path is a different model. |
+| **Change the classifier threshold** (is-it-a-concept cutoff) | CLI, or `config.py` | `--threshold 0.8` (overrides `scientific_concept_threshold`, default 0.60). For library use: `replace(PRODUCTION, scientific_concept_threshold=0.8)`. |
+| **Change how many concepts are returned** | CLI, or `config.py` | `--top-n 100` (default -1 = retain full ranking, uncapped). Production behaviour quotes top 100. |
+| **Swap the glossary** | env or CLI | Point `CONCEPT_EXTRACTION_GLOSSARY_DIR` (or `--glossary-dir`) at a dir containing `glossary_faiss.index` + `glossary_faiss.json`. The index is **loaded, never built**. |
+| **Swap the embedder** | env or CLI | `CONCEPT_EXTRACTION_EMBED_MODEL` (or `--embed-model`) = a Hugging Face id (fetched on first run, needs network) _or_ a local `sentence-transformers` dir. |
+| **Use a different candidate generator** | CLI | `--rung <name>` (rungs = ablation ladder; default `A0` = production). List them via `-h`. |
+| **Make a permanent default change** | `config.py` | Edit the `BlockConfig` field default (or `PRODUCTION`). This affects all runs and bumps every `config_fingerprint` — record it in a run manifest / decision log. |
+| **One-off scenario, no code edit** | Python API | `run_block(sentences, cfg=replace(PRODUCTION, top_n=100, scientific_concept_threshold=0.8))` |
+
+### Concrete example: swap threshold to 0.8 via CLI
+
+```bash
+export CONCEPT_EXTRACTION_GLOSSARY_DIR=/path/to/glossary
+export CONCEPT_EXTRACTION_CLASSIFIER_MODEL=/path/to/model_dir
+uv run concept-extract run input.json -o out.json --threshold 0.8
+```
+
+### Concrete example: swap classifier model in Python
+
+```python
+from concept_extraction import run_block, PRODUCTION
+from dataclasses import replace
+
+cfg = replace(PRODUCTION, classifier_model_path="/data/models/v2_finetuned_onnx")
+result = run_block(sentences, cfg=cfg)
+print(result.config_fingerprint)  # differs from the default => the change is recorded
+```
+
 ## Python API
 
 ```python
